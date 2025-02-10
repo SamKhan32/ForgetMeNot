@@ -1,0 +1,3 @@
+1.) As a forgetful student user, I want a notification aggressiveness setting that can be set to high, so that I can never forget.
+2.) As a high performing student user, I want a notification priority system, so that I can personally set which notifications are the most important.
+3.) As the forgetful student, I have ADHD, so a feature that can reward my lack of executive function would be helpful, because it gamifies staying on top of tasks

@@ -1,0 +1,2 @@
+1.) Notification Aggression setting
+2.) Priority, ie: stuff from slack should be more aggressively pursued than stuff from Canvas
