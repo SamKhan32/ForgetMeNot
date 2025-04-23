@@ -6,3 +6,7 @@ class Assignment(models.Model):
     description = models.TextField(blank=True)
     course_name = models.CharField(max_length=200)
     due_date = models.DateTimeField()
+
+
+    def __str__ (self):
+        return self.course_name + ', ' + self.title + ' due ' + str(self.due_date)
