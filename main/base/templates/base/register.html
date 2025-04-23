@@ -1,0 +1,21 @@
+{% extends 'auth.html' %}
+
+{% load static %}
+
+
+
+{% block content %}
+<div style="text-align: center;">
+    <h2>Register</h2>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+
+<p style="text-align: center;">Already have an account? <br>Login <a href="{% url 'login' %}">here</a></p>
+{% endblock %}
+
+

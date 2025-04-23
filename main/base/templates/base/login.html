@@ -1,0 +1,134 @@
+{% load static %} 
+<!--loads the images-->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Sign In - Forget Me Not</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=K2D:wght@400;700&family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'base/logo.png' %}" type="image/x-icon">
+</head>
+<body>
+    <div id="main-content">
+
+        <section id="logo">
+            <img src="{% static 'base/logo.png' %}" width="50" alt="logo">
+            <p>ForgetMe<em>Not</em></p>
+        </section>
+
+        <div id="sign-in-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color: red; text-align: center;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            
+            <section id="email-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit">Sign In</button>
+                </form>
+            </section>
+
+            <a href="{% url 'restore' %}"><p id="forgot-password">Forgot Password?</p></a>
+            <p id="signup-here">Don't have an account?<br>Sign up <a href="{% url 'register' %}">here</a></p>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+
+body {
+    background-color: #27AE60;
+    font-family: 'Play', sans-serif;
+    text-align: center;
+}
+
+#logo {
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#logo img {
+    width: 50px;
+    height: auto;
+}
+
+#sign-in-body {
+    font-size: 20px;
+    background-color: white;
+    text-align: left;
+    margin: auto;
+    padding: 40px 50px;
+    max-width: 300px;
+    border-radius: 25px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+input {
+    width: 100%;
+    padding: 3px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    background-color: #D9D9D9;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    width: 60%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 10px auto;
+    border: 0;
+}
+
+button:hover {
+    background-color: #bfbfbf;
+    transform: scale(1.05);
+}
+
+#forgot-password {
+    text-align: center;
+}
+
+#signup-here {
+    text-align: center;
+    margin: 0;
+    padding: 30px 0 0 0;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: #182FFF;
+}
+
+em {
+    font-style: normal;
+    font-weight: bold;
+    color: #FB1313;
+}
+</style>
