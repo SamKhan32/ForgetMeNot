@@ -49,6 +49,6 @@ def logoutUser(request):
     messages.success(request, "You have been logged out.")
     return redirect('login')
 
-@login_required(login_url='login')
+
 def home(request):
     return render(request, 'base/home.html')

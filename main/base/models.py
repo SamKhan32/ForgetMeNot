@@ -48,3 +48,14 @@ class SlackIntegration(models.Model):
     bot_access_token = models.CharField(max_length=255)
     channel_id = models.CharField(max_length=50, null=True, blank=True)
     notifications_enabled = models.BooleanField(default=True)
+
+# Create your models here.
+class Assignment(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    course_name = models.CharField(max_length=200)
+    due_date = models.DateTimeField()
+
+
+    def __str__ (self):
+        return self.course_name + ', ' + self.title + ' due ' + str(self.due_date)

@@ -1,0 +1,130 @@
+<div id="navbar-body">
+    <div id="navbar-body-main">
+
+        <div id="main-group">
+            <div class="navbar-option">
+                <a href="{% url 'home' %}">
+                    <button class="navbar-button">Home</button>
+                </a>
+            </div>
+
+            <div class="navbar-option">
+                <a href="{% url 'register' %}">
+                    <button class="navbar-button">Leaderboard</button>
+                </a>
+            </div>
+
+            <div class="navbar-option">
+                <a href="{% url 'restore' %}">
+                    <button class="navbar-button">Avatar</button>
+                </a>
+            </div>
+
+            <div class="navbar-option">
+                <a href="{% url 'register' %}">
+                    <button class="navbar-button">Rewards</button>
+                </a>
+            </div>
+
+            <div class="navbar-option">
+                <a href="{% url 'register' %}">
+                    <button class="navbar-button">Settings</button>
+                </a>
+            </div>
+
+            <div class="navbar-option">
+                <a href="{% url 'register' %}">
+                    <button class="navbar-button">Connect</button>
+                </a>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="navbar-option logout-chip">
+            <a href="{% url 'logout' %}">
+                <button class="navbar-button">Logout</button>
+            </a>
+        </div>    
+        {% endif %}
+
+    </div>
+</div>
+
+<style>
+    :root{
+        --navbar-width: 150px;
+    }
+
+    #navbar-body{
+        
+        display: flex;
+        justify-content: center;
+        top: 100px;
+        padding: 0;
+        position: fixed;
+        background-color: #27AE60;
+        width: var(--navbar-width);
+        height: calc(100vh - 100px);
+    }
+
+    #navbar-body-main {
+        
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: calc(var(--navbar-width) - 20px);
+        height: calc(100% - 10px);
+        background-color: white;
+        border: 2px solid black;
+        border-radius: 25px;
+        
+    }
+
+    #main-group{
+        
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 35px;
+        padding-top: 30px;
+        
+    }
+
+    .logout-chip{
+        margin-top: auto;
+        margin-bottom: 10px;
+    }
+    .logout-chip button{
+        
+        
+        color: red;
+    }
+
+    .navbar-option{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+
+    }
+
+    .navbar-button{
+        
+        padding: 8px 0px;
+        width: 120px;
+        border: none;
+        border-radius: 10px;
+        background-color: white;
+        transition: background-color 0.2s ease;
+        font-weight: bold;
+        
+    }
+
+    .navbar-button:hover{
+        cursor: pointer;
+        background-color: #D9D9D9;
+        
+        
+    }
+
+</style>
