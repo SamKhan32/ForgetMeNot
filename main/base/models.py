@@ -16,6 +16,9 @@ class Task(models.Model):
     description = models.TextField(blank=True)
     is_completed = models.BooleanField(default=False)
 
+    def mark_complete(self):
+        self.is_completed = True
+        self.save()
     def __str__(self):
         return f"{self.name} (for {self.event.name})"
 class Reminder(models.Model):
