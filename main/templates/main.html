@@ -39,9 +39,11 @@
                     </div>
                 </a>
                 {% else %}
-                <div id="sign-in-button">
-                    <a href="{%url 'login'%}"><h1>Sign In</h1></a>        
-                </div>
+                <a href="{%url 'login'%}">
+                    <div id="sign-in-button">
+                        <p>Sign In</p>      
+                    </div>
+                </a>
                 {% endif %}
             </div>
             
@@ -64,6 +66,7 @@
 </html>
 
 <style>
+    
 
     :root{
         --navbar-width: 150px;
@@ -93,13 +96,6 @@
         margin-left: 45px;
     }
 
-    #profile-chip{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 45px;
-    }
-
     #profile-logo{
         height: 60px;
         width: 60px;
@@ -112,21 +108,129 @@
         border-radius: 50%;
 
     }
+    
+    #profile-chip{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 45px;
+    }
 
     #profile-chip a{
         text-decoration: none;
         color: black;
     }
 
+    #sign-in-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        background-color: white;
+        border-radius: 25px;
+        height: 35px;
+        width: 70px;
+
+    }
     
-
-
     #main-body{
+
         width: calc(100vw - var(--navbar-width));
         height: calc(100vh - 100px);
         margin: 0 0 0 var(--navbar-width);
-        padding: 10px 25px;
+        padding: 0;
         background-color: white;
-        border-radius: 25px;
+        border-radius: 25px 0px 0px 25px;
     }
+
+    /*Styling for home page*/
+    #date-bar {
+        border-bottom: 3px solid black;
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        height: 75px;
+        background-color: #4BE58D;
+        border-radius: 25px 0 0 0;
+        padding: 0 20px; /* optional: spacing on sides */
+    }
+
+    .rotated {
+        transform: scaleX(-1);
+    }
+
+    #month-selector {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-arrow {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 50px;
+    }
+
+    .nav-arrow img:hover {
+        cursor: pointer;
+    }
+
+    .month-chip button {
+        font-size: 15px;
+        border: none;
+        border-radius: 20px;
+        background-color: white;
+        padding: 10px 60px;
+        cursor: pointer;
+        max-width: 150px;
+    }
+
+    .month-chip{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+    }
+
+    
+
+    #year-selector {
+        margin-left: auto;
+        padding-right: 60px; 
+    }
+
+    #year-selector button{
+        border: none;
+        border-radius: 20px;
+        background-color: white;
+        padding: 10px 25px;
+        cursor: pointer;
+    }
+
+    #drop-down{
+        background-color: purple;
+        width: 150px;
+        height: 300px;
+        position: relative;
+        top: 100px;
+        
+    }
+
+    .hidden{
+        display: none;
+    }
+
 </style>
+
+<script>
+    function showMonths(){
+        chip = document.getElementById("drop-down");
+        chip.classList.toggle('hidden');
+        
+    }
+</script>

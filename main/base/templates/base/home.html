@@ -3,6 +3,53 @@
 {% load static %}
 
 {% block content %}
-<h1>Welcome to ForgetMeNot</h1>
+<div id="date-bar">
+    
+    <div id="month-selector">
+
+        <div class="nav-arrow rotated">
+            <img src="{% static 'base/nav-arrow.svg' %}" alt="icon" width="30px">
+        </div>
+
+        <div class="month-chip">
+
+            <button onclick="showMonths()">April</button>
+
+        </div>
+
+
+        <div class="nav-arrow">
+            <img src="{% static 'base/nav-arrow.svg' %}" alt="icon" width="30px">
+        </div>
+
+    </div>
+
+    <div id="year-selector">
+        <button>2025</button>
+    </div>
+
+</div>
+
+<div id="drop-down" class="hidden">
+
+    <div class="month-chip">
+
+        <button onclick="showMonths()">February</button>
+
+    </div>
+
+    <div class="month-chip">
+
+        <button onclick="showMonths()">June</button>
+
+    </div>
+
+    <div class="month-chip">
+
+        <button onclick="showMonths()">July</button>
+
+    </div>
+</div>
 
 {% endblock %}
+
