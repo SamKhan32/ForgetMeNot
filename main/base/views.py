@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-
+from .forms import CustomUserCreationForm
 # this is all so we can use our custom user model
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -28,10 +28,10 @@ def loginPage(request):
 
 def registerPage(request):
 
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
