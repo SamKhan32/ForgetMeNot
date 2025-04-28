@@ -59,3 +59,11 @@ class Assignment(models.Model):
 
     def __str__ (self):
         return self.course_name + ', ' + self.title + ' due ' + str(self.due_date)
+    
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=CustomUser)
+def create_canvas_integration(sender, instance, created, **kwargs):
+    if created:
+        CanvasIntegration.objects.create(user=instance)
