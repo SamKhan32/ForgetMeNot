@@ -4,6 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from .services.canvas import fetch_canvas_assignments
+from .models import Assignment
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 # this is all so we can use our custom user model
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -25,7 +29,17 @@ def loginPage(request):
             messages.error(request, 'Username or password is incorrect')
 
     return render(request, 'base/login.html')
+@login_required
+def sync_canvas_assignments(request):
+    try:
+        assignments = fetch_canvas_assignments(request.user)
+        for a in assignments:
+            a.save()
+        message = f"{len(assignments)} assignments synced."
+    except Exception as e:
+        message = str(e)
 
+    return render(request, "sync_result.html", {"message": message})
 def registerPage(request):
 
     form = CustomUserCreationForm()

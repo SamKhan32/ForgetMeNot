@@ -7,7 +7,6 @@ TIMEZONE_CHOICES = [
     ('CST', 'Central Standard Time'),
     ('MST', 'Mountain Standard Time'),
     ('PST', 'Pacific Standard Time'),
-    # you can add more if you want
 ]
 class CustomUserCreationForm(UserCreationForm):
     
