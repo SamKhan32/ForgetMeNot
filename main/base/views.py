@@ -8,8 +8,11 @@ from .services.canvas import fetch_canvas_assignments
 from .models import Assignment
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-# this is all so we can use our custom user model
 from django.contrib.auth import get_user_model
+from django.shortcuts import render
+import datetime
+import calendar
+
 User = get_user_model()
 
 def loginPage(request):
@@ -29,6 +32,8 @@ def loginPage(request):
             messages.error(request, 'Username or password is incorrect')
 
     return render(request, 'base/login.html')
+
+
 @login_required
 def sync_canvas_assignments(request):
     try:
@@ -40,6 +45,8 @@ def sync_canvas_assignments(request):
         message = str(e)
 
     return render(request, "sync_result.html", {"message": message})
+
+
 def registerPage(request):
 
     form = CustomUserCreationForm()
@@ -66,4 +73,17 @@ def logoutUser(request):
 
 
 def home(request):
-    return render(request, 'base/home.html')
+    today = datetime.date.today()
+    year = today.year
+    month = today.month
+
+    _, num_days = calendar.monthrange(year, month)
+
+    day_list = list(range(1, num_days + 1)) 
+
+    context = {
+        'day_list' : day_list, 
+        'month': today.strftime('%B'),
+        'year': year,
+        }
+    return render(request, 'base/home.html', context)
