@@ -227,19 +227,17 @@
     }
 
     .hidden{
-        display: none;
+        
+        display: none !important; 
+
 
     }
 
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const monthButton = document.getElementById("main-month-button");
-        const dropDown = document.getElementById("drop-down");
-
-        monthButton.addEventListener("click", function() {
-            dropDown.classList.toggle("hidden");
-        });
-    });
+    function toggle(){
+        const chip = document.getElementById("drop-down");
+        chip.classList.toggle("hidden");
+    }
 </script>
