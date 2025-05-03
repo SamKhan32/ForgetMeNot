@@ -133,45 +133,6 @@
 </div>
 
 <script>
-    const daysContainer = document.getElementById('calendar-days');
-    const monthButtons = document.querySelectorAll('#drop-down .month-chip button');
-    const mainMonthButton = document.getElementById('main-month-button');
-
-    const currentYear = 2025;
-
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
-    function getDaysInMonth(monthIndex, year) {
-        return new Date(year, monthIndex + 1, 0).getDate();
-    }
-
-    function populateDays(monthIndex) {
-        daysContainer.innerHTML = ''; // Clear existing
-
-        const totalDays = getDaysInMonth(monthIndex, currentYear);
-
-        for (let i = 1; i <= totalDays; i++) {
-            const dayEl = document.createElement('div');
-            dayEl.classList.add('day');
-            dayEl.textContent = i;
-            daysContainer.appendChild(dayEl);
-        }
-    }
-
-    // Attach click listeners to each month
-    monthButtons.forEach((btn, index) => {
-        btn.addEventListener('click', () => {
-            mainMonthButton.textContent = monthNames[index];
-            populateDays(index);
-            document.getElementById('drop-down').classList.add('hidden');
-        });
-    });
-
-    // Initial population (April)
-    populateDays(3);  // April is index 3
 </script>
 {% endblock %}
 
