@@ -111,8 +111,26 @@
     <!-- Days will be populated here -->
 </div>
 
-{% include "month_chip.html" %}
+<div class="align-middle  align-column">
+    <div id="days-of-the-week">
+        <p>Mon</p>
+        <p>Tue</p>
+        <p>Wed</p>
+        <p>Thu</p>
+        <p>Fri</p>
+        <p>Sat</p>
+        <p>Sun</p>
+    </div>
+    <div id="chip-grid">
+        
+        {% for day in day_list %}
 
+        {% include "month_chip.html" with day=day %}
+
+        {% endfor %}
+    </div>
+
+</div>
 
 <script>
     const daysContainer = document.getElementById('calendar-days');
