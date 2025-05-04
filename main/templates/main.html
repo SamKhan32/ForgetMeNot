@@ -52,7 +52,7 @@
 
         {% include 'navbar.html' %}
 
-        <div id="main-body">
+        <div id="main-body" class="{% block main_body_class %}{% endblock %}">
 
             {% block content %}{% endblock %}
 
@@ -311,7 +311,11 @@
         display: flex;
         flex-direction: row;
     }
-
+    .connect-page {
+    overflow-y: auto;
+    min-height: 100vh;
+    background-color: #fefefe;
+}
 
 
 </style>
