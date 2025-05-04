@@ -1,0 +1,63 @@
+{% extends 'auth.html' %}
+
+{% load static %}
+
+{% block content %}
+<h2>User Settings</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="first_name">First name:</label>
+    <input type="text" name="first_name" value="{{ user.first_name }}"><br><br>
+
+    <label for="last_name">Last name:</label>
+    <input type="text" name="last_name" value="{{ user.last_name }}"><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" value="{{ user.email }}"><br><br>
+
+    <label for="notification_frequency">Notification Frequency:</label>
+    <input type="range" id="notification_frequency" name="notification_frequency" min="1" max="24" value="{{ user.notification_frequency|default:24 }}" step="1" class="slider" style="background-color: black;">
+    <span id="frequency_value"></span>
+    <br><br>
+
+    <label for="notification_type">Notification Type:</label><br>
+    <div class="notification-type">
+        <label class="notification-option">
+            <input type="radio" name="notification_type" value="popup" {% if user.notification_type == "popup" %}checked{% endif %}>
+            <span class="notification-label">Popup</span>
+        </label>
+        <label class="notification-option">
+            <input type="radio" name="notification_type" value="banner" {% if user.notification_type == "banner" %}checked{% endif %}>
+            <span class="notification-label">Banner</span>
+        </label>
+        <label class="notification-option">
+            <input type="radio" name="notification_type" value="alert" {% if user.notification_type == "alert" %}checked{% endif %}>
+            <span class="notification-label">Alert</span>
+        </label>
+    </div>
+    <br><br>
+
+    <!-- Notification Intensity Slider -->
+    <label for="notification_intensity">Notification Intensity:</label><br>
+    <input type="range" id="notification_intensity" name="notification_intensity" min="1" max="3" value="{{ user.notification_intensity|default:2 }}" step="1" class="slider">
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<a href="{% url 'home' %}">Back to Home</a>
+
+{% endblock %}
+
+<script>
+    const frequencySlider = document.getElementById("notification_frequency");
+    const frequencyValue = document.getElementById("frequency_value");
+
+    frequencySlider.oninput = function() {
+        frequencyValue.innerHTML = `${frequencySlider.value}`;
+    };
+
+    frequencyValue.innerHTML = frequencySlider.value;
+</script>
+

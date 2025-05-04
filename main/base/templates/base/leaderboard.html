@@ -1,0 +1,17 @@
+{% extends 'auth.html' %}
+{% block content %}
+<h2>Leaderboard</h2>
+<table>
+  <tr>
+    <th>User</th>
+    <th>Score</th>
+  </tr>
+  {% for user, score in user_scores %}
+  <tr>
+    <td>{{ user.username }}</td>
+    <td>{{ score }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}

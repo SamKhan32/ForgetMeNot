@@ -1,0 +1,10 @@
+{% extends 'auth.html' %}
+{% block content %}
+<h2>Leaderboard</h2>
+<ul>
+  {% for user in users %}
+    <li>{{ user.username }}</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
