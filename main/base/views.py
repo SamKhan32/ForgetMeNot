@@ -12,6 +12,9 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 import datetime
 import calendar
+import random
+from django.contrib.auth.models import User
+
 
 User = get_user_model()
 
@@ -87,3 +90,25 @@ def home(request):
         'year': year,
         }
     return render(request, 'base/home.html', context)
+
+@login_required(login_url='login')
+def settingsPage(request):
+    user = request.user
+
+    if request.method == 'POST':
+        user.email = request.POST.get('email')
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.save()
+        messages.success(request, "Settings updated successfully.")
+
+    context = {
+        'user': user
+    }
+    return render(request, 'base/settings.html', context)
+
+
+def leaderboardPage(request):
+    users = User.objects.all()
+    user_scores = [(user, random.randint(1, 1000)) for user in users]
+    return render(request, 'leaderboard.html', {'user_scores': user_scores})
