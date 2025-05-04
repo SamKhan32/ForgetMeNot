@@ -161,11 +161,12 @@
     }
 
     #month-selector {
-        position: absolute;
+        position: relative; /*Changed this to relative so it would support stacking*/
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
+        z-index: 1;
         gap: 10px;
     }
 
@@ -221,7 +222,8 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
-        z-index: 10000; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
+        background: white; 
+        z-index: 1000; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
         margin-top: 5px;
         
     }
