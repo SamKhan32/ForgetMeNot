@@ -1,1 +1,25 @@
 {% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div style="padding: 40px; max-width: 800px; margin: auto;">
+    <h1 style="font-size: 32px; font-family: 'K2D', sans-serif;">Connect Your Canvas Account</h1>
+    <p style="margin-top: 20px; font-size: 18px; font-family: 'Play', sans-serif;">
+        To integrate your Canvas account with ForgetMeNot, follow these steps:
+    </p>
+    <ol style="margin-top: 20px; font-size: 16px; font-family: 'Play', sans-serif; line-height: 1.6;">
+        <li>Log into your Canvas account using your school credentials.</li>
+        <li>Navigate to your profile settings.</li>
+        <li>Find the section for <strong>Approved Integrations</strong> or <strong>Developer Keys</strong>.</li>
+        <li>Generate an API token or key.</li>
+        <li>Copy and paste that token into the settings page on this website.</li>
+    </ol>
+    <p style="margin-top: 30px; font-size: 16px; font-style: italic; font-family: 'Play', sans-serif;">
+        If you're unsure what to do, the GIF below shows the exact steps you need to take.
+    </p>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <img src="{% static 'base/connect-instructions.gif' %}" alt="Canvas connection instructions GIF" style="max-width: 100%; border-radius: 12px; border: 2px solid #2ECC71;">
+    </div>
+</div>
+{% endblock %}
