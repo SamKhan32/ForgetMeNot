@@ -78,15 +78,24 @@ def logoutUser(request):
 def home(request):
     today = datetime.date.today()
     year = today.year
-    month = today.month
-
+    requested_month = request.GET.get('month')
+    if requested_month:
+        try:
+            month = list(calendar.month_name).index(requested_month)
+            year = today.year  # You can add year selection later if needed
+        except ValueError:
+            month = today.month
+            year = today.year
+    else:
+        month = today.month
+        year = today.year
     _, num_days = calendar.monthrange(year, month)
 
     day_list = list(range(1, num_days + 1)) 
 
     context = {
         'day_list' : day_list, 
-        'month': today.strftime('%B'),
+        'month': calendar.month_name[month],
         'year': year,
         }
     return render(request, 'base/home.html', context)
