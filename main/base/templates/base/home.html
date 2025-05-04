@@ -19,73 +19,73 @@
 
                 <div class="month-chip">
         
-                    <button>January</button>
+                    <button class="month-option" data-month="January">January</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>February</button>
+                    <button class="month-option" data-month="February">February</button>
         
                 </div>
         
                 <div class="month-chip">
         
-                    <button>March</button>
+                    <button class="month-option" data-month="March">March</button>
         
                 </div>
         
                 <div class="month-chip">
         
-                    <button>April</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button>May</button>
+                    <button class="month-option" data-month="April">April</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>June</button>
+                    <button class="month-option" data-month="May">May</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>July</button>
+                    <button class="month-option" data-month="June">June</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>August</button>
+                    <button class="month-option" data-month="July">July</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>September</button>
+                    <button class="month-option" data-month="August">August</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>October</button>
+                    <button class="month-option" data-month="September">September</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>November</button>
+                    <button class="month-option" data-month="October">October</button>
         
                 </div>
 
                 <div class="month-chip">
         
-                    <button>December</button>
+                    <button class="month-option" data-month="November">November</button>
+        
+                </div>
+
+                <div class="month-chip">
+        
+                    <button class="month-option" data-month="December">December</button>
         
                 </div>
             </div>
@@ -133,6 +133,25 @@
 </div>
 
 <script>
+        // Add event listeners to all month buttons
+        document.addEventListener("DOMContentLoaded", function () {
+        const monthButtons = document.querySelectorAll(".month-option");
+        const mainButton = document.getElementById("main-month-button");
+
+        monthButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const selectedMonth = this.getAttribute("data-month");
+                mainButton.textContent = selectedMonth;
+
+                // Optional: hide the dropdown after selection
+                document.getElementById("drop-down").classList.add("hidden");
+
+                // Optional: update calendar view logic here
+                // Example: reload page with new month param or AJAX call
+                // updateCalendar(selectedMonth);
+            });
+        });
+    });
 </script>
 {% endblock %}
 
