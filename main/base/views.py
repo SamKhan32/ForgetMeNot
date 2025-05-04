@@ -121,3 +121,6 @@ def leaderboardPage(request):
     users = User.objects.all()
     user_scores = [(user, random.randint(1, 1000)) for user in users]
     return render(request, 'leaderboard.html', {'user_scores': user_scores})
+def connectPage(request):
+
+    return render(request, 'connect.html')

@@ -9,4 +9,5 @@ urlpatterns = [
     path('settings/', views.settingsPage, name='settings'),  
     path('leaderboard/', views.leaderboardPage, name='leaderboard'),
     path('', views.home, name='home'),
+    path('connect/',views.connectPage, name='connect'),
 ]
