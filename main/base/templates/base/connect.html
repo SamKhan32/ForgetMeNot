@@ -21,7 +21,22 @@ connect-page
     <p style="margin-top: 30px; font-size: 16px; font-style: italic; font-family: 'Play', sans-serif;">
         If you're unsure what to do, the GIF below shows the exact steps you need to take.
     </p>
+    <form method="POST" style="margin-top: 40px;">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'Play', sans-serif;">
+            <label for="canvas_url" style="font-size: 16px;">Canvas URL</label>
+            <input type="url" id="canvas_url" name="canvas_url" required placeholder="https://youruniversity.instructure.com"
+                   style="padding: 10px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc;" value="{{ form.canvas_url.value }}">
 
+            <label for="access_token" style="font-size: 16px;">Canvas Access Token</label>
+            <input type="text" id="access_token" name="access_token" required placeholder="Enter your Canvas token"
+                   style="padding: 10px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc;" value="{{ form.canvas_token.value }}">
+
+            <button type="submit" style="margin-top: 20px; padding: 12px; font-size: 16px; font-family: 'K2D', sans-serif; background-color: #2ECC71; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                Save Integration
+            </button>
+        </div>
+    </form>
     <div style="margin-top: 30px; text-align: center;">
         <img src="{% static 'base/connect-instructions.gif' %}" alt="Canvas connection instructions GIF" style="max-width: 100%; border-radius: 12px; border: 2px solid #2ECC71;">
     </div>

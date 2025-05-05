@@ -14,8 +14,10 @@ import datetime
 import calendar
 import random
 from django.contrib.auth.models import User
-
-
+from .forms import CanvasTokenForm
+from django.shortcuts import render, redirect
+from .forms import CanvasTokenForm
+from django.contrib.auth.decorators import login_required
 User = get_user_model()
 
 def loginPage(request):
@@ -121,5 +123,23 @@ def leaderboardPage(request):
     users = User.objects.all()
     user_scores = [(user, random.randint(1, 1000)) for user in users]
     return render(request, 'leaderboard.html', {'user_scores': user_scores})
+
+
+@login_required
 def connectPage(request):
-    return render(request, 'base/connect.html')
+    user = request.user
+
+    if request.method == 'POST':
+        form = CanvasTokenForm(request.POST)
+        if form.is_valid():
+            # Save the form data directly to the user model
+            user.canvas_url = form.cleaned_data['canvas_url']
+            user.canvas_token = form.cleaned_data['canvas_token']
+            user.save()
+
+            # Redirect to a settings page or another page after successful save
+            return redirect('settings')
+    else:
+        form = CanvasTokenForm()  # Initialize the form for GET request
+
+    return render(request, 'base/connect.html', {'form': form})

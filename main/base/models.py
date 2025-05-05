@@ -1,6 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+
+
+
 # Create your models here.
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -31,10 +35,13 @@ class Reminder(models.Model):
     reminder_time = models.DateTimeField()
     sent = models.BooleanField(default=False)  # Track if reminder has been sent
     notification_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('sms', 'SMS')])  # Method of notification
+
 class CustomUser(AbstractUser):
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     timezone = models.CharField(max_length=50, default="EST") 
     birthdate = models.DateField(null=True, blank=True)  # Custom field for birthdate, we could celebrate a birthday lol
+    canvas_url = models.URLField(null=True, blank=True)  # Custom field for Canvas URL
+    canvas_token = models.CharField(max_length=255, null=True, blank=True)  # Custom field for Canvas token
     # for use with canvas
 class CanvasIntegration(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -51,14 +58,17 @@ class SlackIntegration(models.Model):
 
 # Create your models here.
 class Assignment(models.Model):
+    User = get_user_model()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # NEW FIELD
+    title = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     course_name = models.CharField(max_length=200)
     due_date = models.DateTimeField()
 
 
-    def __str__ (self):
-        return self.course_name + ', ' + self.title + ' due ' + str(self.due_date)
+    def __str__(self):
+        return f"{self.course_name}, {self.title} due {self.due_date}"
     
 from django.db.models.signals import post_save
 from django.dispatch import receiver
