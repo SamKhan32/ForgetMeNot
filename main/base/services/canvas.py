@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 from base.models import Assignment, CanvasIntegration
 from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
 
 def fetch_canvas_assignments(user):
     integration = CanvasIntegration.objects.get(user=user)
@@ -16,17 +17,33 @@ def fetch_canvas_assignments(user):
         raise Exception("Canvas API request failed")
 
     data = response.json()
-    assignments = []
+    added_count = 0
 
     for item in data:
         if "assignment" in item:
             a = item["assignment"]
-            assignment = Assignment(
-                title=a.get("name", "Untitled"),
-                course_name=item.get("context_name", "Unknown Course"),
-                description=a.get("description", ""),
-                due_date=parse_datetime(a.get("due_at"))
-            )
-            assignments.append(assignment)
+            title = a.get("name", "Untitled")
+            course = item.get("context_name", "Unknown Course")
+            description = a.get("description", "")
+            due = a.get("due_at")
+            due_date = make_aware(parse_datetime(due)) if due else None
 
-    return assignments
+            # Check if assignment already exists
+            exists = Assignment.objects.filter(
+                user=user,
+                title=title,
+                course_name=course,
+                due_date=due_date
+            ).exists()
+
+            if not exists:
+                Assignment.objects.create(
+                    user=user,
+                    title=title,
+                    course_name=course,
+                    description=description,
+                    due_date=due_date
+                )
+                added_count += 1
+
+    return added_count
