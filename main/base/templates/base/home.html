@@ -4,7 +4,12 @@
 
 {% block content %}
 <div id="date-bar">
-    
+    <div style="text-align: center; margin: 20px;">
+        <form method="post" action="{% url 'sync_canvas' %}">
+            {% csrf_token %}
+            <button id="sync-button" onclick="syncCanvas()">Sync Canvas Assignments</button>
+        </form>
+    </div>
     <div id="month-selector">
 
         <div class="nav-arrow rotated">
@@ -133,6 +138,9 @@
 </div>
 
 <script>
+    function syncCanvas() {
+        alert("Canvas sync initiated!"); // Replace with actual logic later
+    }
         // Add event listeners to all month buttons
         document.addEventListener("DOMContentLoaded", function () {
         const monthButtons = document.querySelectorAll(".month-option");

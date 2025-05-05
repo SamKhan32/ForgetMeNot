@@ -18,6 +18,7 @@ from .forms import CanvasTokenForm
 from django.shortcuts import render, redirect
 from .forms import CanvasTokenForm
 from django.contrib.auth.decorators import login_required
+from base.services.canvas import fetch_canvas_assignments
 User = get_user_model()
 
 def loginPage(request):
@@ -143,3 +144,13 @@ def connectPage(request):
         form = CanvasTokenForm()  # Initialize the form for GET request
 
     return render(request, 'base/connect.html', {'form': form})
+@login_required
+def sync_canvas_view(request):
+    if request.method == 'POST':
+        try:
+            count = fetch_canvas_assignments(request.user)
+            # Optionally: add a message framework response
+            print(f"Synced {count} assignments.")
+        except Exception as e:
+            print(f"Sync failed: {e}")
+        return redirect(request.META.get('HTTP_REFERER', '/'))
