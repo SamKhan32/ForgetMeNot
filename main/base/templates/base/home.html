@@ -11,200 +11,74 @@
         </form>
     </div>
     <div id="month-selector">
-
         <div class="nav-arrow rotated">
             <img src="{% static 'base/nav-arrow.svg' %}" alt="icon" width="30px">
         </div>
-
         <div class="month-chip">
+            <button id="main-month-button" type="button">{{ month }}</button>
 
-            <button id="main-month-button" onclick="toggle()">{{ month }}</button>
-            
             <div id="drop-down" class="hidden">
-
+                {% for m in months %}
                 <div class="month-chip">
-        
-                    <button class="month-option" data-month="January">January</button>
-        
+                    <button class="month-option" data-month="{{ m }}">{{ m }}</button>
                 </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="February">February</button>
-        
-                </div>
-        
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="March">March</button>
-        
-                </div>
-        
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="April">April</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="May">May</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="June">June</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="July">July</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="August">August</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="September">September</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="October">October</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="November">November</button>
-        
-                </div>
-
-                <div class="month-chip">
-        
-                    <button class="month-option" data-month="December">December</button>
-        
-                </div>
+                {% endfor %}
             </div>
-          
-
         </div>
-            
-        
-
-
         <div class="nav-arrow">
             <img src="{% static 'base/nav-arrow.svg' %}" alt="icon" width="30px">
         </div>
-
-
     </div>
-
     <div id="year-selector">
         <button>{{ year }}</button>
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-<div id="calendar-days" class="calendar-days-container">
-    <!-- Days will be populated here -->
-</div>
-
-<div class="align-middle  align-column">
-
-   
-
-  
-
-        <div id="chip-grid">
-            <div class="day-of-the-week">Mon</div>
-            <div class="day-of-the-week">Tue</div>
-            <div class="day-of-the-week">Wed</div>
-            <div class="day-of-the-week">Thu</div>
-            <div class="day-of-the-week">Fri</div>
-            <div class="day-of-the-week">Sat</div>
-            <div class="day-of-the-week">Sun</div>
-            {% for obj in day_objects %}
-              <div
-                class="day-chip-main-body {% if obj.day == current_day %}highlight-border{% endif %}"
-                data-day="{{ obj.day }}"
-              >
-                <p>{{ obj.day }}</p>
-                <div class="assignments-number-background">
-                  <div class="assignments-number">
-                    {{ obj.count }}
-                  </div>
+<div class="align-middle align-column">
+    <div id="chip-grid">
+        <div class="day-of-the-week">Mon</div>
+        <div class="day-of-the-week">Tue</div>
+        <div class="day-of-the-week">Wed</div>
+        <div class="day-of-the-week">Thu</div>
+        <div class="day-of-the-week">Fri</div>
+        <div class="day-of-the-week">Sat</div>
+        <div class="day-of-the-week">Sun</div>
+        {% for obj in day_objects %}
+        <div class="day-chip-main-body" data-day="{{ obj.day }}" onclick="showModal({{ obj.day }})">
+            <p>{{ obj.day }}</p>
+            <div class="assignments-number-background">
+                <div class="assignments-number">{{ obj.count }}</div>
+            </div>
+            <div id="assignments-{{ obj.day }}" class="assignment-hidden" style="display: none;">
+                {% for a in obj.assignments %}
+                <div>
+                    <strong>{{ a.title }}</strong><br>
+                    <small>{{ a.course_name }}</small><br>
+                    <small>Due: {{ a.due_date|date:"M d, Y H:i" }}</small>
+                    <hr>
                 </div>
-              </div>
-            {% endfor %}
-          </div>
-          
-   
+                {% empty %}
+                <p>No assignments</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
+    <div id="assignment-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="modal-close" style="cursor: pointer;">&times;</span>
+            <h3>Assignments for {{ month }} <span id="modal-day"></span></h3>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red; text-align: center;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 </div>
 
-<script>
-    function syncCanvas() {
-        alert("Canvas sync initiated!"); // Replace with actual logic later
-    }
-        // Add event listeners to all month buttons
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const monthButtons = document.querySelectorAll(".month-option");
-        const mainButton = document.getElementById("main-month-button");
-
-        monthButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                const selectedMonth = this.getAttribute("data-month");
-                mainButton.textContent = selectedMonth;
-
-                // Optional: hide the dropdown after selection
-                document.getElementById("drop-down").classList.add("hidden");
-                window.location.href = `?month=${selectedMonth}`;
-                // Optional: update calendar view logic here
-                // Example: reload page with new month param or AJAX call
-                // updateCalendar(selectedMonth);
-            });
-        });
-    });
-
-    const navArrows = document.querySelectorAll(".nav-arrow"); // Selects all navigation arrows
-    navArrows.forEach(arrow => {
-
-        arrow.addEventListener("click", function () {
-
-            const isPrev = arrow.classList.contains("rotated");
-
-            // These are injected into the JS using Django context variables
-            const prevMonth = "{{ prev_month }}";
-            const nextMonth = "{{ next_month }}";
-            const prevYear = "{{ prev_year }}";
-            const nextYear = "{{ next_year }}";
-
-            const targetMonth = isPrev ? prevMonth : nextMonth;
-            const targetYear = isPrev ? prevYear : nextYear;
-
-            window.location.href = `?month=${targetMonth}&year=${targetYear}`;
-
-
-        });
-    })
-</script>
 {% endblock %}
-

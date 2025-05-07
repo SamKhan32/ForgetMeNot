@@ -186,6 +186,7 @@
     }
 
     .month-chip{
+
         position: relative;
         display: flex;
         flex-direction: column;
@@ -226,13 +227,15 @@
     }
 
     #drop-down{ 
+
         position: absolute;
         top: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         gap: 5px;
         background: rgba(255,255,255,0.6); 
-        z-index: 1000; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
+        z-index: 10; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
         margin-top: 5px;
         border-radius: 10px;
         
@@ -258,7 +261,7 @@
 
     .hidden{
         
-        display: none !important; 
+        display: none; 
 
 
     }
@@ -347,12 +350,101 @@
         background-color: #fefefe;
     }
 
+    .modal {
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 600px;
+    }
+
+
 
 </style>
 
 <script>
-    function toggle(){
-        const chip = document.getElementById("drop-down");
-        chip.classList.toggle("hidden");
+    function syncCanvas() {
+        alert("Canvas sync initiated!");
     }
+
+    function showModal(day) {
+        const modal = document.getElementById("assignment-modal");
+        const body = document.getElementById("modal-body");
+        const dayEl = document.getElementById("modal-day");
+
+        const source = document.getElementById(`assignments-${day}`);
+        if (!source) {
+            body.innerHTML = "<p>No data found for this day.</p>";
+        } else {
+            body.innerHTML = source.innerHTML;
+        }
+
+        dayEl.textContent = day;
+        modal.style.display = "block";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const monthButtons = document.querySelectorAll(".month-option");
+        const mainButton = document.getElementById("main-month-button");
+        const dropdown = document.getElementById("drop-down");
+
+        // Dropdown toggle
+        if (mainButton && dropdown) {
+            mainButton.addEventListener("click", function () {
+                console.log("Dropdown toggled");
+                dropdown.classList.toggle("hidden");
+            });
+        }
+
+        // Month selection
+        monthButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const selectedMonth = this.getAttribute("data-month");
+                mainButton.textContent = selectedMonth;
+                dropdown.classList.add("hidden");
+                window.location.href = `?month=${selectedMonth}`;
+            });
+        });
+
+        // Navigation arrows
+        const navArrows = document.querySelectorAll(".nav-arrow");
+        navArrows.forEach(arrow => {
+            arrow.addEventListener("click", function () {
+                const isPrev = arrow.classList.contains("rotated");
+                const prevMonth = "{{ prev_month }}";
+                const nextMonth = "{{ next_month }}";
+                const prevYear = "{{ prev_year }}";
+                const nextYear = "{{ next_year }}";
+                const targetMonth = isPrev ? prevMonth : nextMonth;
+                const targetYear = isPrev ? prevYear : nextYear;
+                window.location.href = `?month=${targetMonth}&year=${targetYear}`;
+            });
+        });
+
+        // Modal close
+        const modalClose = document.getElementById("modal-close");
+        const modal = document.getElementById("assignment-modal");
+
+        modalClose.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        window.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
 </script>
+

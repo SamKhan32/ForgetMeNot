@@ -4,6 +4,13 @@
 {% block main_body_class %}connect-page{% endblock %}
 
 {% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <p style="color: red; text-align: center;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
 <div style="padding: 40px; max-width: 800px; margin: auto;">
     <h1 style="font-size: 32px; font-family: 'K2D', sans-serif;">
         Connect Your Canvas Account
@@ -14,14 +21,21 @@
     </p>
     <ol style="margin-top: 20px; font-size: 16px; font-family: 'Play', sans-serif; line-height: 1.6;">
         <li>Log into your Canvas account using your school credentials.</li>
-        <li>Navigate to your profile settings.</li>
+        <li>Navigate to your <strong>Profile</strong> --> <strong>Settings</strong>.</li>
         <li>Find the section for <strong>Approved Integrations</strong> or <strong>Developer Keys</strong>.</li>
-        <li>Generate an API token or key.</li>
+        <li>Press <strong>New Access Token</strong> button and fill out the simple form. Leave expiration date blank.</li>
         <li>Copy and paste that token into the settings page on this website.</li>
+        <li>For Canvas URL use the base url for your institution (i.e. https://instructure.charlotte.edu).</li>
+        <li>Click <strong>Save Integration</strong>. You should see a confirmation message.</li>
+        <li>Click <strong>Sync Canvas Assignments</strong> on the home page to see your assignments.</li>
     </ol>
 
     <p style="margin-top: 30px; font-size: 16px; font-style: italic; font-family: 'Play', sans-serif;">
         If you're unsure what to do, the GIF below shows the exact steps you need to take.
+    </p>
+
+    <p style="margin-top: 30px; font-size: 16px; font-style: italic; font-family: 'Play', sans-serif;">
+        Note: if you would like to reset your Canvas Token, press <strong>Reset Canvas Token</strong>.
     </p>
 
     <form method="POST" style="margin-top: 40px;">
@@ -55,12 +69,22 @@
             >
                 Save Integration
             </button>
+
         </div>
     </form>
 
-    <div style="margin-top: 30px; text-align: center;">
+    <form method="POST" action="{% url 'reset_canvas' %}">
+        {% csrf_token %}
+        <button type="submit" id="canvas-reset-button" 
+        style="margin-top: 20px; padding: 12px; font-size: 16px; background-color: red; color: white; border: none; border-radius: 8px; cursor: pointer;"
+        >
+            Reset Canvas Token
+        </button>
+    </form>
+
+    <div style="margin-top: 30px; text-align: center; margin-bottom: 100px;">
         <img
-            src="{% static 'base/connect-instructions.gif' %}"
+            src="{% static 'base/connect-instructions-v2.gif' %}"
             alt="Canvas connection instructions GIF"
             style="max-width: 100%; border-radius: 12px; border: 2px solid #2ECC71;"
         >
