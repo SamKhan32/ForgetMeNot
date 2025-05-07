@@ -1,23 +1,24 @@
 import requests
 from base.models import Assignment
 from django.utils.dateparse import parse_datetime
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, localtime
 from collections import defaultdict
 
 
 def _normalize_datetime(dt_str):
     """
-    Parse an ISO string into an aware datetime.
-    If the parsed datetime is naive, make it timezone aware.
+    Parse an ISO string into an aware datetime, then convert to local time.
     """
     if not dt_str:
         return None
     dt = parse_datetime(dt_str)
     if dt is None:
         return None
-    # If dt is naive (no tzinfo), assume default timezone and make aware
+    # If dt is naive, assume default timezone and make aware
     if dt.tzinfo is None:
         dt = make_aware(dt)
+    # Convert UTC-aware datetime to local timezone
+    dt = localtime(dt)
     return dt
 
 

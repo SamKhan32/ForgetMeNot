@@ -19,8 +19,20 @@ from django.shortcuts import render, redirect
 from .forms import CanvasTokenForm
 from django.contrib.auth.decorators import login_required
 from base.services.canvas import fetch_canvas_assignments
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.conf import settings
+import datetime, calendar
+from zoneinfo import ZoneInfo
+from .models import Assignment
 User = get_user_model()
-
+TZ_MAP = {
+    'EST': 'America/New_York',
+    'CST': 'America/Chicago',
+    'MST': 'America/Denver',
+    'PST': 'America/Los_Angeles',
+}
 def loginPage(request):
     if request.user.is_authenticated: #if the user is already logged in
         return redirect('home')  
@@ -80,64 +92,80 @@ def logoutUser(request):
 
 # base/views.py
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-import datetime, calendar
-from .models import Assignment
-
 @login_required(login_url='login')
 def home(request):
+    user = request.user
     today = datetime.date.today()
     year = today.year
     requested_month = request.GET.get('month')
 
-    # Figure out which month to show
+    # Determine month index
     if requested_month:
         try:
             month = list(calendar.month_name).index(requested_month)
-            if month == 0:  # month_name[0] is ''
+            if month == 0:
                 raise ValueError
         except ValueError:
             month = today.month
     else:
         month = today.month
 
-    # How many days in that month?
+    # Number of days
     _, num_days = calendar.monthrange(year, month)
     current_day = today.day
 
-    # Prev / next month logic
-    if month == 1:
-        prev_month, prev_year = 12, year - 1
-    else:
-        prev_month, prev_year = month - 1, year
+    # Prev/next month logic (names)
+    prev_month, prev_year = (12, year-1) if month==1 else (month-1, year)
+    next_month, next_year = (1, year+1)  if month==12 else (month+1, year)
 
+    # --- build local‐zone start/end for this month ---
+    # pick the user’s REAL timezone
+    tz_name = TZ_MAP.get(getattr(user, 'timezone', None), settings.TIME_ZONE)
+    user_zone = ZoneInfo(tz_name)
+
+    # local month start: 1st at 00:00 in user zone
+    local_start = datetime.datetime(year, month, 1, tzinfo=user_zone)
+    # local month end: first day of next month at 00:00
     if month == 12:
-        next_month, next_year = 1, year + 1
+        local_end = datetime.datetime(year+1, 1, 1, tzinfo=user_zone)
     else:
-        next_month, next_year = month + 1, year
+        local_end = datetime.datetime(year, month+1, 1, tzinfo=user_zone)
 
-    # Build a list of dicts: each day number + how many assignments
-    day_objects = []
-    for d in range(1, num_days + 1):
-        cnt = Assignment.objects.filter(
-            user=request.user,
-            due_date__year=year,
-            due_date__month=month,
-            due_date__day=d
-        ).count()
-        day_objects.append({"day": d, "count": cnt})
+    # convert to UTC for the DB query
+    utc = ZoneInfo('UTC')
+    start_utc = local_start.astimezone(utc)
+    end_utc   = local_end.astimezone(utc)
+
+    # fetch all assignments whose UTC timestamp falls in that window
+    qs = Assignment.objects.filter(
+        user=user,
+        due_date__gte=start_utc,
+        due_date__lt =end_utc
+    )
+
+    # tally by local day
+    counts = {d: 0 for d in range(1, num_days + 1)}
+    for a in qs:
+        # a.due_date is stored in UTC, so convert back to user zone
+        local_dt = a.due_date.astimezone(user_zone)
+        counts[local_dt.day] += 1
+
+    # build the day_objects list for template
+    day_objects = [
+        {"day": d, "count": counts[d]}
+        for d in range(1, num_days + 1)
+    ]
 
     context = {
-        "day_objects": day_objects,
-        "current_day": current_day,
-        "month": calendar.month_name[month],
-        "month_num": month,
-        "year": year,
-        "prev_month": calendar.month_name[prev_month],
-        "next_month": calendar.month_name[next_month],
-        "prev_year": prev_year,
-        "next_year": next_year,
+        "day_objects":   day_objects,
+        "current_day":   current_day,
+        "month":         calendar.month_name[month],
+        "month_num":     month,
+        "year":          year,
+        "prev_month":    calendar.month_name[prev_month],
+        "next_month":    calendar.month_name[next_month],
+        "prev_year":     prev_year,
+        "next_year":     next_year,
     }
     return render(request, "base/home.html", context)
 
