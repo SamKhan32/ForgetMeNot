@@ -128,22 +128,27 @@
 
 <div class="align-middle  align-column">
 
-    <div id="chip-grid">
+   
 
-        <p class="day-of-the-week">Mon</p>
-        <p class="day-of-the-week">Tue</p>
-        <p class="day-of-the-week">Wed</p>
-        <p class="day-of-the-week">Thu</p>
-        <p class="day-of-the-week">Fri</p>
-        <p class="day-of-the-week">Sat</p>
-        <p class="day-of-the-week">Sun</p>
+  
 
-        {% for day in day_list %}
-
-        {% include "day_chip.html" with day=day current_day=current_day %}
-
-        {% endfor %}
-    </div>
+        <div id="chip-grid">
+            {% for obj in day_objects %}
+              <div
+                class="day-chip-main-body {% if obj.day == current_day %}highlight-border{% endif %}"
+                data-day="{{ obj.day }}"
+              >
+                <p>{{ obj.day }}</p>
+                <div class="assignments-number-background">
+                  <div class="assignments-number">
+                    {{ obj.count }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          
+   
 
 </div>
 

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from base.views import sync_canvas_view
+from base.views import sync_canvas_simple
 urlpatterns = [
     path('/', views.loginPage, name='login'),
     path('register/', views.registerPage, name='register'),
@@ -10,5 +10,5 @@ urlpatterns = [
     path('leaderboard/', views.leaderboardPage, name='leaderboard'),
     path('', views.home, name='home'),
     path('connect/',views.connectPage, name='connect'),
-    path('sync_canvas/', sync_canvas_view, name='sync_canvas'),
+    path('sync_canvas/', sync_canvas_simple, name='sync_canvas'),
 ]

@@ -1,8 +1,13 @@
-<div class="day-chip-main-body {% if day == current_day %}highlight-border{% endif %}" data-day="{{ day }}">
-    <p>{{ day }}</p>
+{% for obj in day_objects %}
+  <div
+    class="day-chip-main-body {% if obj.day == current_day %}highlight-border{% endif %}"
+    data-day="{{ obj.day }}"
+  >
+    <p>{{ obj.day }}</p>
     <div class="assignments-number-background">
-        <div class="assignments-number">
-            0
-        </div>
+      <div class="assignments-number">
+        {{ obj.count }}
+      </div>
     </div>
-</div>
+  </div>
+{% endfor %}

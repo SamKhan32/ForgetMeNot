@@ -78,56 +78,68 @@ def logoutUser(request):
     return redirect('login')
 
 
+# base/views.py
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+import datetime, calendar
+from .models import Assignment
+
+@login_required(login_url='login')
 def home(request):
     today = datetime.date.today()
     year = today.year
     requested_month = request.GET.get('month')
-    
-    # Default month and year setup
+
+    # Figure out which month to show
     if requested_month:
         try:
             month = list(calendar.month_name).index(requested_month)
-            year = today.year  # You can add year selection logic here later if needed
+            if month == 0:  # month_name[0] is ''
+                raise ValueError
         except ValueError:
             month = today.month
-            year = today.year
     else:
         month = today.month
-        year = today.year
 
-    # Calculate the number of days in the requested month
+    # How many days in that month?
     _, num_days = calendar.monthrange(year, month)
     current_day = today.day
-    day_list = list(range(1, num_days + 1)) 
 
-    # Logic to get the previous and next month
+    # Prev / next month logic
     if month == 1:
-        prev_month = 12
-        prev_year = year - 1
+        prev_month, prev_year = 12, year - 1
     else:
-        prev_month = month - 1
-        prev_year = year
+        prev_month, prev_year = month - 1, year
 
     if month == 12:
-        next_month = 1
-        next_year = year + 1
+        next_month, next_year = 1, year + 1
     else:
-        next_month = month + 1
-        next_year = year
+        next_month, next_year = month + 1, year
 
-    # Pass the necessary context variables to the template
+    # Build a list of dicts: each day number + how many assignments
+    day_objects = []
+    for d in range(1, num_days + 1):
+        cnt = Assignment.objects.filter(
+            user=request.user,
+            due_date__year=year,
+            due_date__month=month,
+            due_date__day=d
+        ).count()
+        day_objects.append({"day": d, "count": cnt})
+
     context = {
-        'day_list': day_list,
-        'month': calendar.month_name[month],
-        'year': year,
-        'current_day': current_day,
-        'prev_month': calendar.month_name[prev_month],  # Previous month name
-        'next_month': calendar.month_name[next_month],  # Next month name
-        'prev_year': prev_year,  # Previous year if transitioning from Jan to Dec
-        'next_year': next_year,  # Next year if transitioning from Dec to Jan
+        "day_objects": day_objects,
+        "current_day": current_day,
+        "month": calendar.month_name[month],
+        "month_num": month,
+        "year": year,
+        "prev_month": calendar.month_name[prev_month],
+        "next_month": calendar.month_name[next_month],
+        "prev_year": prev_year,
+        "next_year": next_year,
     }
-
-    return render(request, 'base/home.html', context)
+    return render(request, "base/home.html", context)
 
 @login_required(login_url='login')
 def settingsPage(request):
@@ -152,32 +164,34 @@ def leaderboardPage(request):
     return render(request, 'leaderboard.html', {'user_scores': user_scores})
 
 
-@login_required
+@login_required(login_url='login')
 def connectPage(request):
     user = request.user
 
     if request.method == 'POST':
         form = CanvasTokenForm(request.POST)
         if form.is_valid():
-            # Save the form data directly to the user model
-            user.canvas_url = form.cleaned_data['canvas_url']
+            # Save into your CustomUser fields
+            user.canvas_url   = form.cleaned_data['canvas_url']
             user.canvas_token = form.cleaned_data['canvas_token']
             user.save()
-
-            # Redirect to a settings page or another page after successful save
+            messages.success(request, "Canvas integration saved!")
             return redirect('settings')
     else:
-        form = CanvasTokenForm()  # Initialize the form for GET request
+        # Pre‑fill the form with whatever’s already on the user
+        form = CanvasTokenForm(initial={
+            'canvas_url':   user.canvas_url,
+            'canvas_token': user.canvas_token,
+        })
 
     return render(request, 'base/connect.html', {'form': form})
 
 @login_required
-def sync_canvas_view(request):
-    if request.method == 'POST':
+def sync_canvas_simple(request):
+    if request.method == "POST":
         try:
-            count = fetch_canvas_assignments(request.user)
-            # Optionally: add a message framework response
-            print(f"Synced {count} assignments.")
+            fetch_canvas_assignments(request.user)
+            messages.success(request, "Canvas assignments updated!")
         except Exception as e:
-            print(f"Sync failed: {e}")
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+            messages.error(request, f"Sync failed: {e}")
+    return redirect("home")
