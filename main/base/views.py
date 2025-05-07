@@ -82,25 +82,51 @@ def home(request):
     today = datetime.date.today()
     year = today.year
     requested_month = request.GET.get('month')
+    
+    # Default month and year setup
     if requested_month:
         try:
             month = list(calendar.month_name).index(requested_month)
-            year = today.year  # You can add year selection later if needed
+            year = today.year  # You can add year selection logic here later if needed
         except ValueError:
             month = today.month
             year = today.year
     else:
         month = today.month
         year = today.year
-    _, num_days = calendar.monthrange(year, month)
 
+    # Calculate the number of days in the requested month
+    _, num_days = calendar.monthrange(year, month)
+    current_day = today.day
     day_list = list(range(1, num_days + 1)) 
 
+    # Logic to get the previous and next month
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
+
+    # Pass the necessary context variables to the template
     context = {
-        'day_list' : day_list, 
+        'day_list': day_list,
         'month': calendar.month_name[month],
         'year': year,
-        }
+        'current_day': current_day,
+        'prev_month': calendar.month_name[prev_month],  # Previous month name
+        'next_month': calendar.month_name[next_month],  # Next month name
+        'prev_year': prev_year,  # Previous year if transitioning from Jan to Dec
+        'next_year': next_year,  # Next year if transitioning from Dec to Jan
+    }
+
     return render(request, 'base/home.html', context)
 
 @login_required(login_url='login')
@@ -144,7 +170,7 @@ def connectPage(request):
         form = CanvasTokenForm()  # Initialize the form for GET request
 
     return render(request, 'base/connect.html', {'form': form})
-    
+
 @login_required
 def sync_canvas_view(request):
     if request.method == 'POST':
