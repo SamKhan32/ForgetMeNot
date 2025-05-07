@@ -24,15 +24,15 @@
     <label for="notification_type">Notification Type:</label><br>
     <div class="notification-type">
         <label class="notification-option">
-            <input type="radio" name="notification_type" value="popup" {% if user.notification_type == "popup" %}checked{% endif %}>
+            <input type="checkbox" name="notification_type" value="popup" {% if user.notification_type == "popup" %}checked{% endif %}>
             <span class="notification-label">Popup</span>
         </label>
         <label class="notification-option">
-            <input type="radio" name="notification_type" value="banner" {% if user.notification_type == "banner" %}checked{% endif %}>
+            <input type="checkbox" name="notification_type" value="banner" {% if user.notification_type == "banner" %}checked{% endif %}>
             <span class="notification-label">Banner</span>
         </label>
         <label class="notification-option">
-            <input type="radio" name="notification_type" value="alert" {% if user.notification_type == "alert" %}checked{% endif %}>
+            <input type="checkbox" name="notification_type" value="alert" {% if user.notification_type == "alert" %}checked{% endif %}>
             <span class="notification-label">Alert</span>
         </label>
     </div>

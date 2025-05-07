@@ -18,6 +18,7 @@ class Event(models.Model):
     def __str__(self):
         return self.name
     # a event could have a number of tasks associated with it
+
 class Task(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tasks')
     name = models.CharField(max_length=50)
@@ -29,6 +30,7 @@ class Task(models.Model):
         self.save()
     def __str__(self):
         return f"{self.name} (for {self.event.name})"
+
 class Reminder(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -43,12 +45,14 @@ class CustomUser(AbstractUser):
     canvas_url = models.URLField(null=True, blank=True)  # Custom field for Canvas URL
     canvas_token = models.CharField(max_length=255, null=True, blank=True)  # Custom field for Canvas token
     # for use with canvas
+
 class CanvasIntegration(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     canvas_url = models.URLField()
     access_token = models.CharField(max_length=255)
     last_synced = models.DateTimeField(null=True, blank=True)
     # for use with slack
+
 class SlackIntegration(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slack_user_id = models.CharField(max_length=50)
@@ -60,7 +64,6 @@ class SlackIntegration(models.Model):
 class Assignment(models.Model):
     User = get_user_model()
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # NEW FIELD
-    title = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     course_name = models.CharField(max_length=200)

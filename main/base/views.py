@@ -144,6 +144,7 @@ def connectPage(request):
         form = CanvasTokenForm()  # Initialize the form for GET request
 
     return render(request, 'base/connect.html', {'form': form})
+    
 @login_required
 def sync_canvas_view(request):
     if request.method == 'POST':

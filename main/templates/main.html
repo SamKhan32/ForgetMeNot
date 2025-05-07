@@ -25,7 +25,7 @@
 
             <div>
                 {% if user.is_authenticated %}
-                    <h1>Welcome, {{ user.first_name }}!</h1>
+                    <h1>Welcome, {{ user.username }}!</h1>
                 {% else %}
                     <h1>Welcome, guest!</h1>
                 {% endif %}
@@ -114,7 +114,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 45px;
+        margin-right: 30px;
     }
 
     #profile-chip a{
@@ -161,15 +161,6 @@
         transform: scaleX(-1);
     }
 
-    #month-selector {
-        position: relative; /*Changed this to relative so it would support stacking*/
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        align-items: center;
-        z-index: 1;
-        gap: 10px;
-    }
 
     .nav-arrow {
         display: flex;
@@ -202,11 +193,27 @@
         
     }
 
+    #drop-down .month-option{
+        border: 2px solid black;
+    }
+
+    #month-selector {
+        position: absolute; /*Changed this to relative so it would support stacking*/ 
+        /*Vlad - changing it back to absolute as the selector should be aligned exactly in the middle of the viewport*/
+
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        z-index: 1;
+
+    }
+
     
 
     #year-selector {
         margin-left: auto;
-        padding-right: 60px; 
+        padding-right: 40px; 
     }
 
     #year-selector button{
@@ -223,28 +230,30 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
-        background: white; 
+        background: rgba(255,255,255,0.6); 
         z-index: 1000; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
         margin-top: 5px;
+        border-radius: 10px;
         
     }
+
     #sync-button {
-    background-color: #2ECC71; /* same as profile logo */
-    color: black;
-    font-weight: bold;
-    border: 2px solid black;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    font-family: 'Play', sans-serif;
-}
-#sync-button:hover {
-    background-color: #27AE60; /* matches your main background */
-    transform: scale(1.05);
-}
+        background-color: #2ECC71; /* same as profile logo */
+        color: black;
+        font-weight: bold;
+        border: 2px solid black;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-family: 'Play', sans-serif;
+    }
+    #sync-button:hover {
+        background-color: #27AE60; /* matches your main background */
+        transform: scale(1.05);
+    }
 
     .hidden{
         
@@ -254,8 +263,9 @@
     }
 
 
-    /*Styling for month chips*/
-    .month-chip-main-body{
+    /*Styling for day chips*/
+    .day-chip-main-body{
+
         cursor:pointer;
         position: relative;
         display: flex;
@@ -263,10 +273,10 @@
         justify-content: center;
         margin: 10px;
         background-color: green;
-        height: 75px;
-        width: 75px;
+        height: 50px;
+        width: calc(((100vw - var(--navbar-width)) / 7) - 50px);
         border-radius: 25px;
-        border: 3px solid black;
+        border: 2px solid black;
 
     }
 
@@ -288,6 +298,10 @@
         border: 2px solid black;
     }
 
+    .highlight-border{
+        border: 4px solid yellow;
+    }
+
     /*Styling for chip grid*/
 
     #chip-grid{
@@ -299,14 +313,12 @@
         
     }
 
-    #days-of-the-week{
+    .day-of-the-week{
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: center;
-        gap: 100px;
-        margin: 0;
-        padding-right: 15px;
+        margin: 10px 0 0 0;
         cursor: default;
     }
 
@@ -329,10 +341,10 @@
         flex-direction: row;
     }
     .connect-page {
-    overflow-y: auto;
-    min-height: 100vh;
-    background-color: #fefefe;
-}
+        overflow-y: auto;
+        min-height: 100vh;
+        background-color: #fefefe;
+    }
 
 
 </style>

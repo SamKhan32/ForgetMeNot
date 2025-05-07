@@ -109,28 +109,38 @@
     </div>
 
     <div id="year-selector">
-        <button>2025</button>
+        <button>{{ year }}</button>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 <div id="calendar-days" class="calendar-days-container">
     <!-- Days will be populated here -->
 </div>
 
 <div class="align-middle  align-column">
-    <div id="days-of-the-week">
-        <p>Mon</p>
-        <p>Tue</p>
-        <p>Wed</p>
-        <p>Thu</p>
-        <p>Fri</p>
-        <p>Sat</p>
-        <p>Sun</p>
-    </div>
+
     <div id="chip-grid">
-        
+
+        <p class="day-of-the-week">Mon</p>
+        <p class="day-of-the-week">Tue</p>
+        <p class="day-of-the-week">Wed</p>
+        <p class="day-of-the-week">Thu</p>
+        <p class="day-of-the-week">Fri</p>
+        <p class="day-of-the-week">Sat</p>
+        <p class="day-of-the-week">Sun</p>
+
         {% for day in day_list %}
 
-        {% include "month_chip.html" with day=day %}
+        {% include "day_chip.html" with day=day current_day=current_day %}
 
         {% endfor %}
     </div>
@@ -142,7 +152,8 @@
         alert("Canvas sync initiated!"); // Replace with actual logic later
     }
         // Add event listeners to all month buttons
-        document.addEventListener("DOMContentLoaded", function () {
+
+    document.addEventListener("DOMContentLoaded", function () {
         const monthButtons = document.querySelectorAll(".month-option");
         const mainButton = document.getElementById("main-month-button");
 
@@ -160,6 +171,28 @@
             });
         });
     });
+
+    const navArrows = document.querySelectorAll(".nav-arrow"); // Selects all navigation arrows
+    navArrows.forEach(arrow => {
+
+        arrow.addEventListener("click", function () {
+
+            const isPrev = arrow.classList.contains("rotated");
+
+            // These are injected into the JS using Django context variables
+            const prevMonth = "{{ prev_month }}";
+            const nextMonth = "{{ next_month }}";
+            const prevYear = "{{ prev_year }}";
+            const nextYear = "{{ next_year }}";
+
+            const targetMonth = isPrev ? prevMonth : nextMonth;
+            const targetYear = isPrev ? prevYear : nextYear;
+
+            window.location.href = `?month=${targetMonth}&year=${targetYear}`;
+
+
+        });
+    })
 </script>
 {% endblock %}
 
