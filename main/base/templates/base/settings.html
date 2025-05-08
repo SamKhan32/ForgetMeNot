@@ -1,36 +1,50 @@
-{% extends 'auth.html' %}
+{% extends 'auth.html' %}  {# Inherit layout from auth.html base template #}
 
-{% load static %}
+{% load static %}  {# Load static template tag to access static files if needed #}
 
-{% block content %}
+{% block content %}  {# Start the content block for the settings page #}
+
+<!-- Page Heading -->
 <h2>User Settings</h2>
 
+<!-- User Settings Form -->
 <form method="POST">
-    {% csrf_token %}
+    {% csrf_token %}  {# Include CSRF token for form security #}
+
+    <!-- First Name Field -->
     <label for="first_name">First name:</label>
     <input type="text" name="first_name" value="{{ user.first_name }}"><br><br>
 
+    <!-- Last Name Field -->
     <label for="last_name">Last name:</label>
     <input type="text" name="last_name" value="{{ user.last_name }}"><br><br>
 
+    <!-- Email Field -->
     <label for="email">Email:</label>
     <input type="email" name="email" value="{{ user.email }}"><br><br>
 
+    <!-- Notification Frequency Slider -->
     <label for="notification_frequency">Notification Frequency:</label>
     <input type="range" id="notification_frequency" name="notification_frequency" min="1" max="24" value="{{ user.notification_frequency|default:24 }}" step="1" class="slider" style="background-color: black;">
-    <span id="frequency_value"></span>
+    <span id="frequency_value"></span>  {# Displays selected slider value in real-time #}
     <br><br>
 
+    <!-- Notification Type Checkboxes -->
     <label for="notification_type">Notification Type:</label><br>
     <div class="notification-type">
+        <!-- Popup option -->
         <label class="notification-option">
             <input type="checkbox" name="notification_type" value="popup" {% if user.notification_type == "popup" %}checked{% endif %}>
             <span class="notification-label">Popup</span>
         </label>
+
+        <!-- Banner option -->
         <label class="notification-option">
             <input type="checkbox" name="notification_type" value="banner" {% if user.notification_type == "banner" %}checked{% endif %}>
             <span class="notification-label">Banner</span>
         </label>
+
+        <!-- Alert option -->
         <label class="notification-option">
             <input type="checkbox" name="notification_type" value="alert" {% if user.notification_type == "alert" %}checked{% endif %}>
             <span class="notification-label">Alert</span>
@@ -43,21 +57,23 @@
     <input type="range" id="notification_intensity" name="notification_intensity" min="1" max="3" value="{{ user.notification_intensity|default:2 }}" step="1" class="slider">
     <br><br>
 
+    <!-- Submit button to save form data -->
     <button type="submit">Save Changes</button>
 </form>
 
+<!-- Navigation link back to home page -->
 <a href="{% url 'home' %}">Back to Home</a>
 
 {% endblock %}
 
+<!-- JavaScript to update the frequency value display in real time -->
 <script>
-    const frequencySlider = document.getElementById("notification_frequency");
-    const frequencyValue = document.getElementById("frequency_value");
+    const frequencySlider = document.getElementById("notification_frequency");  // Get slider element
+    const frequencyValue = document.getElementById("frequency_value");  // Get span element to show value
 
     frequencySlider.oninput = function() {
-        frequencyValue.innerHTML = `${frequencySlider.value}`;
+        frequencyValue.innerHTML = `${frequencySlider.value}`;  // Update text as slider moves
     };
 
-    frequencyValue.innerHTML = frequencySlider.value;
+    frequencyValue.innerHTML = frequencySlider.value;  // Set initial value on page load
 </script>
-

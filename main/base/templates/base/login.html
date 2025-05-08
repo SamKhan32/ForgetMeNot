@@ -1,57 +1,73 @@
-{% load static %} 
-<!--loads the images-->
-
-
+{% load static %}  {# Load static files so we can reference images and styles #}
 
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Metadata and mobile responsiveness -->
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Sign In - Forget Me Not</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=K2D:wght@400;700&family=Play:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
     <link rel="icon" href="{% static 'base/logo.png' %}" type="image/x-icon">
 </head>
+
 <body>
     <div id="main-content">
 
+        <!-- Logo and Branding Section -->
         <section id="logo">
             <img src="{% static 'base/logo.png' %}" width="50" alt="logo">
             <p>ForgetMe<em>Not</em></p>
         </section>
 
+        <!-- Login Form Container -->
         <div id="sign-in-body">
+
+            {# Show error or info messages if any exist #}
             {% if messages %}
                 {% for message in messages %}
                     <p style="color: red; text-align: center;">{{ message }}</p>
                 {% endfor %}
             {% endif %}
             
+            <!-- Sign-In Form -->
             <section id="email-form">
                 <form method="POST">
-                    {% csrf_token %}
+                    {% csrf_token %}  {# Security token for form submission #}
+
+                    <!-- Username Field -->
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
 
+                    <!-- Password Field -->
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
 
+                    <!-- Submit Button -->
                     <button type="submit">Sign In</button>
                 </form>
             </section>
 
+            <!-- Forgot Password and Sign Up Links -->
             <a href="{% url 'restore' %}"><p id="forgot-password">Forgot Password?</p></a>
-            <p id="signup-here">Don't have an account?<br>Sign up <a href="{% url 'register' %}">here</a></p>
+            <p id="signup-here">
+                Don't have an account?<br>
+                Sign up <a href="{% url 'register' %}">here</a>
+            </p>
         </div>
     </div>
 </body>
 </html>
 
+<!-- Embedded CSS for styling -->
 <style>
-
 body {
     background-color: #27AE60;
     font-family: 'Play', sans-serif;

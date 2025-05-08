@@ -1,29 +1,31 @@
-{% load static %}
+{% load static %}  {# Load static files like images and stylesheets #}
 
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Meta and head setup for responsive and modern rendering -->
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>ForgetMeNot</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link href="https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Play:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=K2D:ital,wght@...&family=Play:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-
 <body>
-
     <div>
-        
+        <!-- Top bar with navigation and greeting -->
         <div id="top-bar">
-
             <div>
+                <!-- Home icon linking to homepage -->
                 <figure id="house_icon">
                     <a href="{% url 'home' %}"><img src="{% static 'base/house_icon.webp' %}" width="60" alt="house icon"></a>
                 </figure>
             </div>
 
             <div>
+                <!-- Display welcome message -->
                 {% if user.is_authenticated %}
                     <h1>Welcome, {{ user.username }}!</h1>
                 {% else %}
@@ -33,72 +35,67 @@
 
             <div id="profile-chip">
                 {% if user.is_authenticated %}
+                <!-- Display profile circle with first letter of username -->
                 <a href="{% url 'register' %}">  
                     <div id="profile-logo">
-                        <p> {{user.username |slice:":1"|upper}}</p>
+                        <p>{{ user.username|slice:":1"|upper }}</p>
                     </div>
                 </a>
                 {% else %}
-                <a href="{%url 'login'%}">
+                <!-- Sign-in button for unauthenticated users -->
+                <a href="{% url 'login' %}">
                     <div id="sign-in-button">
                         <p>Sign In</p>      
                     </div>
                 </a>
                 {% endif %}
             </div>
-            
         </div>
-        
 
+        <!-- Include sidebar/navbar HTML -->
         {% include 'navbar.html' %}
 
+        <!-- Main content area with conditional class -->
         <div id="main-body" class="{% block main_body_class %}{% endblock %}">
-
             {% block content %}{% endblock %}
-
         </div>
-        
-
     </div>
-    
-
 </body>
 </html>
 
 <style>
-    
-
-    :root{
+    /* Define base values */
+    :root {
         --navbar-width: 150px;
     }
 
+    /* Body styling */
     body {
         background-color: #27AE60;
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow-x: hidden; /*  Needed to add vertical scroll for some of the elements on the connect page, if this interferes with other pages we can make more specifc - Sam */
+        overflow-x: hidden;
         font-family: 'Play', sans-serif;
-        
     }
 
-    #top-bar{
-        
-
+    /* Top bar styling */
+    #top-bar {
         justify-content: space-between;
         display: flex;
         align-items: center;
         background-color: #27AE60;
         width: 100%;
         height: 100px;
-        
     }
 
-    #house_icon{
+    /* House icon placement */
+    #house_icon {
         margin-left: 45px;
     }
 
-    #profile-logo{
+    /* Circle profile initials */
+    #profile-logo {
         height: 60px;
         width: 60px;
         align-items: center;
@@ -108,22 +105,24 @@
         font-size: 25px;
         background-color: #2ECC71;
         border-radius: 50%;
-
     }
-    
-    #profile-chip{
+
+    /* Wrapper for profile info/sign-in */
+    #profile-chip {
         display: flex;
         align-items: center;
         justify-content: center;
         margin-right: 30px;
     }
 
-    #profile-chip a{
+    /* Remove default underline and color for profile links */
+    #profile-chip a {
         text-decoration: none;
         color: black;
     }
 
-    #sign-in-button{
+    /* Styling for sign-in button */
+    #sign-in-button {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -132,20 +131,19 @@
         border-radius: 25px;
         height: 35px;
         width: 70px;
-
     }
-    
-    #main-body{
 
+    /* Main content styling */
+    #main-body {
         width: calc(100vw - var(--navbar-width));
         height: calc(100vh - 100px);
         margin: 0 0 0 var(--navbar-width);
         padding: 0;
         background-color: white;
-        border-radius: 25px 0px 0px 25px;
+        border-radius: 25px 0 0 25px;
     }
 
-    /*Styling for home page*/
+    /* Date bar styling at top of calendar */
     #date-bar {
         border-bottom: 3px solid black;
         display: flex;
@@ -155,13 +153,13 @@
         height: 75px;
         background-color: #4BE58D;
         border-radius: 25px 0 0 0;
-        padding: 0 20px; 
+        padding: 0 20px;
     }
 
+    /* Arrow flip for previous month */
     .rotated {
         transform: scaleX(-1);
     }
-
 
     .nav-arrow {
         display: flex;
@@ -174,6 +172,7 @@
         cursor: pointer;
     }
 
+    /* Styling for month dropdown and button */
     .month-chip button {
         font-size: 15px;
         border: none;
@@ -181,44 +180,37 @@
         background-color: white;
         padding: 5px;
         cursor: pointer;
-        width: 150px; 
+        width: 150px;
         text-align: center;
     }
 
-    .month-chip{
-
+    .month-chip {
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        
     }
 
-    #drop-down .month-option{
+    #drop-down .month-option {
         border: 2px solid black;
     }
 
     #month-selector {
-        position: absolute; /*Changed this to relative so it would support stacking*/ 
-        /*Vlad - changing it back to absolute as the selector should be aligned exactly in the middle of the viewport*/
-
+        position: absolute;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
         z-index: 1;
-
     }
-
-    
 
     #year-selector {
         margin-left: auto;
-        padding-right: 40px; 
+        padding-right: 40px;
     }
 
-    #year-selector button{
+    #year-selector button {
         border: none;
         border-radius: 20px;
         background-color: white;
@@ -226,23 +218,23 @@
         cursor: pointer;
     }
 
-    #drop-down{ 
-
+    /* Month dropdown list */
+    #drop-down {
         position: absolute;
         top: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         gap: 5px;
-        background: rgba(255,255,255,0.6); 
-        z-index: 10; /* I made this higher than everything, might need to change when opening days to view assignments - Sam*/
+        background: rgba(255, 255, 255, 0.6);
+        z-index: 10;
         margin-top: 5px;
         border-radius: 10px;
-        
     }
 
+    /* Button for syncing Canvas assignments */
     #sync-button {
-        background-color: #2ECC71; /* same as profile logo */
+        background-color: #2ECC71;
         color: black;
         font-weight: bold;
         border: 2px solid black;
@@ -254,23 +246,19 @@
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         font-family: 'Play', sans-serif;
     }
+
     #sync-button:hover {
-        background-color: #27AE60; /* matches your main background */
+        background-color: #27AE60;
         transform: scale(1.05);
     }
 
-    .hidden{
-        
-        display: none; 
-
-
+    .hidden {
+        display: none;
     }
 
-
-    /*Styling for day chips*/
-    .day-chip-main-body{
-
-        cursor:pointer;
+    /* Day chips for calendar */
+    .day-chip-main-body {
+        cursor: pointer;
         position: relative;
         display: flex;
         align-items: center;
@@ -281,15 +269,13 @@
         width: calc(((100vw - var(--navbar-width)) / 7) - 50px);
         border-radius: 25px;
         border: 2px solid black;
-
     }
 
-    .assignments-number{
-        position:absolute;
-        
+    .assignments-number {
+        position: absolute;
     }
 
-    .assignments-number-background{
+    .assignments-number-background {
         position: absolute;
         display: flex;
         align-items: center;
@@ -302,22 +288,19 @@
         border: 2px solid black;
     }
 
-    .highlight-border{
+    /* Highlight today's date */
+    .highlight-border {
         border: 4px solid yellow;
     }
 
-    /*Styling for chip grid*/
-
-    #chip-grid{
- 
+    /* Calendar grid for weekdays and chips */
+    #chip-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr); 
+        grid-template-columns: repeat(7, 1fr);
         column-gap: 25px;
-
-        
     }
 
-    .day-of-the-week{
+    .day-of-the-week {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -326,30 +309,31 @@
         cursor: default;
     }
 
-    /* Universal Styling */
-    .align-middle{
+    /* Utility classes for alignment */
+    .align-middle {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         width: auto;
-       
     }
 
-    .align-column{
+    .align-column {
         display: flex;
         flex-direction: column;
     }
 
-    .align-row{
+    .align-row {
         display: flex;
         flex-direction: row;
     }
+
     .connect-page {
         overflow-y: auto;
         min-height: 100vh;
         background-color: #fefefe;
     }
 
+    /* Modal base setup */
     .modal {
         position: fixed;
         z-index: 999;

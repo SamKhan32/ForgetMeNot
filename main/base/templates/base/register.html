@@ -1,21 +1,25 @@
-{% extends 'auth.html' %}
+{% extends 'auth.html' %}  {# Inherit from base authentication layout template #}
 
-{% load static %}
+{% load static %}  {# Load static files if needed (e.g., CSS, images) #}
 
+{% block content %}  {# Begin content block #}
 
-
-{% block content %}
+<!-- Heading for the registration page -->
 <div style="text-align: center;">
     <h2>Register</h2>
 </div>
 
+<!-- Registration form using Django form rendering -->
 <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
+    {% csrf_token %}  {# Protect the form with a CSRF token #}
+    {{ form.as_p }}    {# Render the form fields wrapped in <p> tags #}
+    <button type="submit">Register</button>  {# Submit button #}
 </form>
 
-<p style="text-align: center;">Already have an account? <br>Login <a href="{% url 'login' %}">here</a></p>
-{% endblock %}
+<!-- Navigation link for users who already have an account -->
+<p style="text-align: center;">
+    Already have an account? <br>
+    Login <a href="{% url 'login' %}">here</a>
+</p>
 
-
+{% endblock %}  {# End content block #}

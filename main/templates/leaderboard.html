@@ -1,10 +1,16 @@
 {% extends 'auth.html' %}
+
 {% block content %}
-<h2>Leaderboard</h2>
-<ul>
-  {% for user in users %}
-    <li>{{ user.username }}</li>
-  {% endfor %}
-</ul>
-<a href="{% url 'home' %}">Back to Home</a>
+  <!-- Leaderboard title -->
+  <h2>Leaderboard</h2>
+
+  <!-- Unordered list to display all user usernames -->
+  <ul>
+    {% for user in users %}
+      <li>{{ user.username }}</li>  <!-- Display each user's username -->
+    {% endfor %}
+  </ul>
+
+  <!-- Link to return to the home page -->
+  <a href="{% url 'home' %}">Back to Home</a>
 {% endblock %}

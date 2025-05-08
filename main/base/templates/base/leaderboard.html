@@ -1,18 +1,27 @@
-{% extends 'main.html' %}
+{% extends 'main.html' %}  {# Inherit the main layout template #}
 
-{% block content %}
+{% block content %}  {# Start content block to insert page-specific HTML #}
+
+<!-- Leaderboard heading -->
 <h2>Leaderboard</h2>
+
+<!-- Table displaying usernames and their corresponding scores -->
 <table>
   <tr>
-    <th>User</th>
-    <th>Score</th>
+    <th>User</th>   {# Column header for usernames #}
+    <th>Score</th>  {# Column header for scores #}
   </tr>
+
+  {# Loop through each (user, score) tuple in user_scores and render a row #}
   {% for user, score in user_scores %}
   <tr>
-    <td>{{ user.username }}</td>
-    <td>{{ score }}</td>
+    <td>{{ user.username }}</td>  {# Display username #}
+    <td>{{ score }}</td>          {# Display corresponding score #}
   </tr>
   {% endfor %}
 </table>
+
+<!-- Link to return to the home page -->
 <a href="{% url 'home' %}">Back to Home</a>
+
 {% endblock %}

@@ -1,12 +1,16 @@
 {% for obj in day_objects %}
+  <!-- Each chip represents a day of the month -->
   <div
     class="day-chip-main-body {% if obj.day == current_day %}highlight-border{% endif %}"
     data-day="{{ obj.day }}"
   >
+    <!-- Display the day number -->
     <p>{{ obj.day }}</p>
+
+    <!-- Container for assignment count badge -->
     <div class="assignments-number-background">
       <div class="assignments-number">
-        {{ obj.count }}
+        {{ obj.count }} <!-- Number of assignments due on this day -->
       </div>
     </div>
   </div>

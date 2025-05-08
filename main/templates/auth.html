@@ -1,46 +1,57 @@
-{% load static %}
+{% load static %}  <!-- Load static files like images and CSS -->
 
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Meta tags for character encoding and responsiveness -->
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>{% block title %}Forget Me Not{% endblock %}</title>
+    <title>{% block title %}Forget Me Not{% endblock %}</title>  <!-- Allow title override from child templates -->
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <!-- Google Fonts for consistent styling -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=K2D:wght@400;700&family=Play:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon for the tab icon -->
     <link rel="icon" href="{% static 'base/logo.png' %}" type="image/x-icon">
 </head>
+
 <body>
     <div id="main-content">
+        <!-- Logo section at the top of the page -->
         <section id="logo">
-            <img src="{% static 'base/logo.png' %}" width="50" alt="logo">
-            <p>ForgetMe<em>Not</em></p>
+            <img src="{% static 'base/logo.png' %}" width="50" alt="logo">  <!-- App logo -->
+            <p>ForgetMe<em>Not</em></p>  <!-- App name with styled emphasis -->
         </section>
 
         <div id="sign-in-body">
+            <!-- Display Django messages (e.g., login error) if any -->
             {% if messages %}
                 {% for message in messages %}
                     <p style="color: red; text-align: center;">{{ message }}</p>
                 {% endfor %}
             {% endif %}
 
+            <!-- Placeholder for page-specific content from child templates -->
             {% block content %}
-            
             {% endblock %}
         </div>
     </div>
 </body>
 </html>
 
+<!-- Inline CSS for layout and styling -->
 <style>
+/* Overall page background and font */
 body {
     background-color: #27AE60;
     font-family: 'Play', sans-serif;
     text-align: center;
 }
 
+/* App logo section styling */
 #logo {
     font-size: 30px;
     display: flex;
@@ -50,11 +61,13 @@ body {
     margin-top: 10px;
 }
 
+/* Logo image size */
 #logo img {
     width: 50px;
     height: auto;
 }
 
+/* Centered card styling for sign-in and other forms */
 #sign-in-body {
     font-size: 20px;
     background-color: white;
@@ -66,6 +79,7 @@ body {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Input field styling */
 input {
     width: 100%;
     padding: 3px;
@@ -77,6 +91,7 @@ input {
     font-size: 16px;
 }
 
+/* Submit button styling */
 button {
     width: 60%;
     padding: 8px;
@@ -89,11 +104,13 @@ button {
     border: 0;
 }
 
+/* Button hover effect */
 button:hover {
     background-color: #bfbfbf;
     transform: scale(1.05);
 }
 
+/* Additional text styling */
 #forgot-password {
     text-align: center;
 }
@@ -104,11 +121,13 @@ button:hover {
     padding: 30px 0 0 0;
 }
 
+/* Link styling */
 a, a:visited {
     text-decoration: none;
     color: #182FFF;
 }
 
+/* Special emphasis for part of the app name */
 em {
     font-style: normal;
     font-weight: bold;
